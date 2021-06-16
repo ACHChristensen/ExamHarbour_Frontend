@@ -1,0 +1,112 @@
+@import "bootstrap/dist/css/bootstrap.min.css";
+
+body {
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  background-color: rgb(255, 255, 255);
+}
+@media (max-aspect-ratio: 16/9) {
+  .fullscreen-bg {
+    width: 300%;
+    left: -100%;
+  }
+}
+
+  .fullscreen-bg {
+    overflow: hidden;
+ z-index:-99;
+}
+.video-background iframe {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none; 
+  filter: blur(10px);
+  z-index:-99;
+}
+
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+    monospace;
+}
+
+.login{
+  text-align: center;
+}
+.padimage{
+padding-top: 3rem;
+}
+
+ul.header {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+ background-color: aliceblue;
+ }
+ 
+ ul.header li.logout { float: right;
+  padding-right:6vh;
+  padding-top: 1vw;}
+
+ ul.header li.logo {
+   text-align: center;
+   padding-bottom: 1rem;
+   padding-top: 1vw;
+ 
+ }
+ 
+ ul.header li a {
+  color: rgb(121, 121, 121);
+  font-weight: normal;
+  text-decoration: none;
+
+  padding-bottom: 0rem;  
+ }
+ ul.headernav{
+   background-color: rgb(200, 182, 180);
+ }
+
+
+ ul.header li a:hover:not(.active) {
+
+  text-align: center;
+  text-decoration: none;
+  
+ }
+ .active{color: white;
+  text-align: center;
+  text-decoration: none; }
+
+ ul.header li a:hover:not(.active) { color: rgb(0, 0, 0); font-weight: bold; }
+
+ ul.headernav{
+   text-align: center;
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+  padding-top: 1rem;
+  padding-bottom: 1rem;
+ }
+
+ ul.headernav li a{
+  text-decoration: none;
+  color: white; 
+  padding-right: 3rem;
+ }
+ ul.headernav li a:hover:not(.active) {
+  text-decoration: none;
+  color: rgb(124, 123, 123); 
+ }
+ .active{
+   color: black !important;
+  text-decoration: none;  }
+ 
+
