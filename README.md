@@ -1,4 +1,4 @@
-*An Exames project in Computer Science AP*
+**An Exames project in Computer Science AP**
 - by me
 
 # Getting Started with Create React App
