@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
-import facade from "./apiFacade";
+import facade, { handleHttpErrors } from "./apiFacade.jsx";
+import GetAllOwnersUI from "./ownersFacade.jsx";
 import {
   BrowserRouter as Router,
   Switch,
@@ -19,6 +20,7 @@ import $ from 'jquery';
 import Popper from 'popper.js';
 import 'bootstrap/dist/js/bootstrap.bundle.min';
 
+let owners = [];
 
 export function App() {
   const [loggedIn, setLoggedIn] = useState(false);
@@ -34,15 +36,20 @@ export function App() {
     history.push('/');
   };
 
-  const login = (user, pass) => {
-    facade.login(user, pass).then((res) => setLoggedIn(true));
+  let test = null;
+ const login = (user, pass) => {
+   facade.login(user, pass);
+    const token = window.sessionStorage.getItem("jwtToken");
+    if (token == ! null) {
+      setLoggedIn(true);
+      test = test + "succes";
+    }
+    return test;
   };
+
 
   return (
     <>
-      {/* <iframe width="560" height="315" src="https://www.youtube.com/embed/pGbIOC83-So" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe> */}
-
-
       {loggedIn ? (
         <div>
           <HeaderLogo />
@@ -52,8 +59,8 @@ export function App() {
               <Home />
               {/* <LoggedIn path="/"/> */}
             </Route>
-            <Route path="/userstory1">
-              <US1 />
+            <Route path="/owners">
+              <GetAllOwnersUI loggedIn={loggedIn}/>
             </Route>
             <Route path="/userstory2">
               <US2 />
@@ -64,12 +71,12 @@ export function App() {
       ) : (
         <Route exact path="/">
           <Video />
-          <LogIn login={login} />
+          <LogIn login={login} test={test} />
         </Route>
       )}
 
     </>
-  );
+  ) ;
 }
 
 // function Logout(logOut) {
@@ -109,8 +116,8 @@ export function HeaderLogo() {
 }
 function Video() {
   return (<div><div className="video-background">
-    <iframe className="fullscreen-bg " frameBorder="0" allowtransparency="true" allowFullScreen autoplay loop
-      src={"https://www.youtube.com/embed/pGbIOC83-So?autoplay=1&mute=1"} /></div>
+    <iframe className="fullscreen-bg " frameBorder="0" allowtransparency="true" allowFullScreen autoPlay playlist="true"
+      src={"https://www.youtube.com/embed/7P9PFp8G4g8?autoplay=1&mute=0"} /></div>
   </div>);
 }
 export function HeaderNav() {
@@ -118,11 +125,11 @@ export function HeaderNav() {
     <div>
       <ul className="headernav">
         <li>
-          <NavLink activeClassName="active" to="/userstory1">
-            User Story 1
+          <NavLink activeClassName="active" to="/owners">
+            Ejere
           </NavLink>
           <NavLink activeClassName="active" to="/userstory2">
-            User Story 1
+            User Story 2
           </NavLink>
         </li>
       </ul>
@@ -151,14 +158,21 @@ export function US2() {
       <h2>Userstory 2 - here</h2>
     </>
   );
-  }
-function LogIn({ login }) {
-  const init = { username: "", password: "" };
+}
+function LogIn({ login }, {test}) {
+  const init = { username: "", password: "" }; 
   const [loginCredentials, setLoginCredentials] = useState(init);
 
   const performLogin = (evt) => {
     evt.preventDefault();
-    login(loginCredentials.username, loginCredentials.password);
+  login(loginCredentials.username, loginCredentials.password);
+
+    if (test === null) {
+      alert("There is no such user or admin")
+    } else{
+      window.location.href = "/";
+      window.sessionStorage.setItem("jwtToken", true);
+    }
   };
   const onChange = (evt) => {
     setLoginCredentials({
@@ -173,8 +187,11 @@ function LogIn({ login }) {
         <img src="favicon.ico" width="400vw" />
         <h2>Login</h2>
         <form onChange={onChange}>
-          <input placeholder="User Name" id="username" />
-          <input placeholder="Password" id="password" />
+          <input type="text" placeholder="User Name" id="username" />
+          <br />
+          <input type="password" placeholder="Password" id="password" />
+          <br />
+          <br />
           <button className={`btn btn-outline-dark`} onClick={performLogin}>Login</button>
         </form>
       </div>

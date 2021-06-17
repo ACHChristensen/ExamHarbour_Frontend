@@ -1,13 +1,16 @@
 //import ReactDOM from "react-dom";
 import jwt_decode from "jwt-decode";
 import jwt, { TokenExpiredError } from "jsonwebtoken";
-import {SERVER_URL} from './apiFacade.js'
+import React, { useState, useEffect } from "react";
 
 
+const URL ="https://achc.dk/HarbourExam"
+//const URL = "http://localhost:8080/cathrinesbackend";
 
-function handleHttpErrors(res) {
-  if (!res.ok) {
-    return Promise.reject({ status: res.status, fullError: res.json() });
+export function handleHttpErrors(res) {
+  console.log(res.code)
+  if (!res.code == null) {
+    return ({ status: res.status, fullError: res.json() });
   }
   return res.json();
 }
@@ -20,7 +23,7 @@ function apiFacade() {
   };
 
   const getToken = () => {
-    return window.sessionStorage.getItem("jwtToken");
+    return window.sessionStorage.getItem;
   };
   const loggedIn = () => {
     const loggedIn = getToken() != null;
@@ -37,28 +40,31 @@ function apiFacade() {
       password: password,
     });
     return fetch(URL + "/api/login", options)
-      .then(handleHttpErrors)
       .then((res) => {
-        setToken(res.token);
+        console.log(res)
+        if (res.ok === true) {
+            setToken(res.token);  
+           
+        }
       });
   };
 
   const fetchData = () => {
     const options = makeOptions("GET", true); //True add's the token
-    return fetch(SERVER_URL + "/api/info/user", options).then(handleHttpErrors);
+    return fetch(URL + "/api/info/user", options).then(handleHttpErrors);
   };
 
-const tjekRoles = () => {
-  let roles = [];
-  const token = window.sessionStorage.getItem("jwtToken");
+  const tjekRoles = () => {
+    let roles = [];
+    const token = window.sessionStorage.getItem;
     const decodedToken = jwt_decode(token);
     roles.push(decodedToken["roles"]);
     return roles;
-}
+  }
 
- const tjekLogin = () => {
-    
-  // let token = window.sessionStorage.getItem("jwtToken");
+  const tjekLogin = () => {
+
+    // let token = window.sessionStorage.getItem("jwtToken");
     // if(token.length===0){ return false};
     // const decodedToken = (jwt_decode(token));
     // let timeBeforeExp = decodedToken["exp"];
@@ -66,7 +72,7 @@ const tjekRoles = () => {
     const now = new Date().getTime();
     // timeBeforeExp -= now;
     // console.log("Her jeg = " + timeBeforeExp);
-    
+
     if (
       window.sessionStorage.getItem("jwtToken") == null //|| 0 >= timeBeforeExp
     ) {
@@ -93,6 +99,15 @@ const tjekRoles = () => {
 
     return opts;
   };
+
+  // function getAllOwners() {
+  //   let allOwnersURL = "";
+  //   allOwnersURL = allOwnersURL.concat(URL,"api/owners");
+  //   const options = makeOptions("GET", true)
+  //   const fetching = fetch(allOwnersURL, options)
+  //       .then(handleHttpErrors);
+  //       return JSON.stringify(fetching.then());
+  // }
   return {
     makeOptions,
     setToken,
@@ -102,6 +117,7 @@ const tjekRoles = () => {
     logout,
     fetchData,
     tjekLogin,
+
   };
 }
 const facade = apiFacade();
