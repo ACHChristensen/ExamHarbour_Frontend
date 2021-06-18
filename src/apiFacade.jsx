@@ -4,8 +4,8 @@ import jwt, { TokenExpiredError } from "jsonwebtoken";
 import React, { useState, useEffect } from "react";
 
 
-const URL ="https://achc.dk/HarbourExam"
-//const URL = "http://localhost:8080/cathrinesbackend";
+export const URL_SERVER ="https://achc.dk/HarbourExam"
+//export const URL_SERVER = "http://localhost:8080/cathrinesbackend";
 
 export function handleHttpErrors(res) {
   console.log(res.code)
@@ -39,7 +39,7 @@ function apiFacade() {
       username: user,
       password: password,
     });
-    return fetch(URL + "/api/login", options)
+    return fetch(URL_SERVER + "/api/login", options)
       .then((res) => {
         console.log(res)
         if (res.ok === true) {
@@ -51,7 +51,7 @@ function apiFacade() {
 
   const fetchData = () => {
     const options = makeOptions("GET", true); //True add's the token
-    return fetch(URL + "/api/info/user", options).then(handleHttpErrors);
+    return fetch(URL_SERVER + "/api/info/user", options).then(handleHttpErrors);
   };
 
   const tjekRoles = () => {
@@ -100,14 +100,23 @@ function apiFacade() {
     return opts;
   };
 
-  // function getAllOwners() {
-  //   let allOwnersURL = "";
-  //   allOwnersURL = allOwnersURL.concat(URL,"api/owners");
-  //   const options = makeOptions("GET", true)
-  //   const fetching = fetch(allOwnersURL, options)
-  //       .then(handleHttpErrors);
-  //       return JSON.stringify(fetching.then());
-  // }
+  function fetchHabours(){
+      const makeOptions = (method, body) => {
+      var opts = {
+          method: method,
+          headers: {
+              "Content-type": "application/json",
+              Accept: "application/json",
+          },
+      };
+      if (body) {
+          opts.body = JSON.stringify(body);
+      }
+      return opts;
+  };
+  const options = makeOptions("GET", true);
+      return fetch(URL_SERVER + "/api/habours", options).then(handleHttpErrors);
+ }
   return {
     makeOptions,
     setToken,
@@ -117,7 +126,7 @@ function apiFacade() {
     logout,
     fetchData,
     tjekLogin,
-
+    fetchHabours
   };
 }
 const facade = apiFacade();

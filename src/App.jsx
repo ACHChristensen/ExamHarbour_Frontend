@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import facade, { handleHttpErrors } from "./apiFacade.jsx";
 import GetAllOwnersUI from "./ownersFacade.jsx";
+import GetBoatsByHabour, {habourSelect} from "./showBoats.jsx";
 import {
   BrowserRouter as Router,
   Switch,
@@ -55,24 +56,25 @@ export function App() {
           <HeaderLogo />
           <HeaderNav />
           <Switch>
-            <Route path="/home">
-              <Home />
-              {/* <LoggedIn path="/"/> */}
-            </Route>
             <Route path="/owners">
               <GetAllOwnersUI loggedIn={loggedIn}/>
             </Route>
-            <Route path="/userstory2">
-              <US2 />
+            <Route path="/harbours">
+              <GetBoatsByHabour habours={facade.fetchHabours} boatss ={habourSelect.boats} />
             </Route>
             <Route path="/logout">{logOut}</Route>
+            <Route>
+              <Home/>
+          </Route>
           </Switch>
         </div>
+        
       ) : (
-        <Route exact path="/">
+        <Route >
           <Video />
           <LogIn login={login} test={test} />
         </Route>
+        
       )}
 
     </>
@@ -128,8 +130,8 @@ export function HeaderNav() {
           <NavLink activeClassName="active" to="/owners">
             Ejere
           </NavLink>
-          <NavLink activeClassName="active" to="/userstory2">
-            User Story 2
+          <NavLink activeClassName="active" to="/harbours">
+            Havne
           </NavLink>
         </li>
       </ul>
@@ -140,25 +142,11 @@ export function HeaderNav() {
 export function Home() {
   return (
     <>
-      <h2>Home is here</h2>
+      <h2>Lavet af Cathrine</h2>
     </>
   );
 }
 
-export function US1() {
-  return (
-    <>
-      <h2>Userstory 1 - here</h2>
-    </>
-  );
-}
-export function US2() {
-  return (
-    <>
-      <h2>Userstory 2 - here</h2>
-    </>
-  );
-}
 function LogIn({ login }, {test}) {
   const init = { username: "", password: "" }; 
   const [loginCredentials, setLoginCredentials] = useState(init);
@@ -185,6 +173,7 @@ function LogIn({ login }, {test}) {
     <>
       <div className="login padimage">
         <img src="favicon.ico" width="400vw" />
+        <h4>Havne IT-system</h4>
         <h2>Login</h2>
         <form onChange={onChange}>
           <input type="text" placeholder="User Name" id="username" />
@@ -196,25 +185,6 @@ function LogIn({ login }, {test}) {
         </form>
       </div>
     </>
-  );
-}
-function LoggedIn() {
-  const [dataFromServer, setDataFromServer] = useState("Loading...");
-
-  useEffect(() => {
-    facade
-      .fetchData()
-      .then((data) => setDataFromServer(data.msg))
-      .catch((err) => {
-        console.log(err);
-      });
-  }, []);
-
-  return (
-    <div>
-      <h2>Data Received from server</h2>
-      <h3>{dataFromServer}</h3>
-    </div>
   );
 }
 

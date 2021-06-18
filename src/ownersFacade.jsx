@@ -1,7 +1,7 @@
 import "react-bootstrap";
 import "bootstrap";
 import React, { useState, useEffect, onChange } from "react";
-import { handleHttpErrors } from "./apiFacade";
+import { handleHttpErrors, URL_SERVER } from "./apiFacade";
 
 const deafultOwner = [{
     address: "",
@@ -19,7 +19,7 @@ export default function GetAllOwnersUI(loggedIn) {
 
     function FetchingOwners(loggedIn) {
         const options = makeOptions("GET", loggedIn);
-        return fetch("http://localhost:8080/cathrinesbackend/api/owners", options).then(handleHttpErrors).then((res) => setOwners(res));
+        return fetch(URL_SERVER + "api/owners", options).then(handleHttpErrors).then((res) => setOwners(res));
     }
     const makeOptions = (method, addToken, body) => {
         var opts = {
@@ -47,17 +47,18 @@ export default function GetAllOwnersUI(loggedIn) {
         <div>
             <table className="table">
                 <thead>
+
                     <tr>
                         <th className="col-ms-4" scope="col"></th>
-                        <th className="col-ms-4" scope="col">Name</th>
-                        <th className="col-ms-4" scope="col">Adress</th>
-                        <th className="col-ms-4" scope="col">Phone</th>
+                        <th className="col-ms-4" scope="col">Navn</th>
+                        <th className="col-ms-4" scope="col">Adresse</th>
+                        <th className="col-ms-4" scope="col">Telefonnummer</th>
                     </tr>
                 </thead>
                 <tbody>
                     {owners.map((owner) => {
                         return (
-                            <tr className="col-md-5" scope="row">
+                            <tr className="col-ms-4" scope="row">
                                 <td></td>
                                 <td>{owner.name}</td>
                                 <td>{owner.address}</td>
@@ -65,8 +66,9 @@ export default function GetAllOwnersUI(loggedIn) {
                             </tr>
                         )
                     })
-                    }</tbody>
-        
+                    }
+                </tbody>
+
             </table>
         </div>
 
